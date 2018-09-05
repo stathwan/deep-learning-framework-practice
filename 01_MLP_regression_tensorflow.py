@@ -62,8 +62,6 @@ for epoch in range(epoch_size):
 #####################
 # evaluate
 #####################
-
-
 loss_val = sess.run([loss], feed_dict ={train_x: TestX, train_y: TestY})
 print('eval_loss : {}'.format(loss_val))
     
@@ -72,7 +70,6 @@ print('eval_loss : {}'.format(loss_val))
 #####################
 # predict
 #####################
-
 pred = sess.run(out, feed_dict ={train_x: TestX})    
 print('predict : {}'.format(pred[:10]))        
     
