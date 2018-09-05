@@ -46,48 +46,37 @@ optimizer = tf.train.AdamOptimizer()
 train_optimizer = optimizer.minimize(loss)
 
 
-with tf.Session() as sess:
-    sess.run(tf.global_variables_initializer()) 
-    for epoch in range(epoch_size):
-        for index, offset in enumerate(range(0, TrainX.shape[0], batch_size)):
-            batch_x, batch_y = TrainX[offset: offset + batch_size], TrainY[offset: offset + batch_size]
-            sess.run([train_optimizer], feed_dict ={train_x: batch_x, train_y: batch_y})
-        # train and net output
-        if epoch % 1 == 0:
-            loss_val= sess.run([loss], feed_dict ={train_x: TrainX, train_y: TrainY})
-            print('loss : {}'.format(loss_val))
+sess= tf.Session()
 
-    loss_val = sess.run([loss], feed_dict ={train_x: TestX, train_y: TestY})
-    print('eval_loss : {}'.format(loss_val))
-    
-    pred = sess.run(out, feed_dict ={train_x: TestX})    
-    print('predict : {}'.format(pred[:10]))    
+sess.run(tf.global_variables_initializer()) 
+for epoch in range(epoch_size):
+    for index, offset in enumerate(range(0, TrainX.shape[0], batch_size)):
+        batch_x, batch_y = TrainX[offset: offset + batch_size], TrainY[offset: offset + batch_size]
+        sess.run([train_optimizer], feed_dict ={train_x: batch_x, train_y: batch_y})
+    # train and net output
+    if epoch % 1 == 0:
+        loss_val= sess.run([loss], feed_dict ={train_x: TrainX, train_y: TrainY})
+        print('loss : {}'.format(loss_val))
+
+
 #####################
 # evaluate
 #####################
 
 
+loss_val = sess.run([loss], feed_dict ={train_x: TestX, train_y: TestY})
+print('eval_loss : {}'.format(loss_val))
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
     
     
 #####################
 # predict
 #####################
 
-
-
+pred = sess.run(out, feed_dict ={train_x: TestX})    
+print('predict : {}'.format(pred[:10]))        
+    
+sess.close()
 
 
 
