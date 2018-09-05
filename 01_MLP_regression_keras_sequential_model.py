@@ -41,12 +41,12 @@ model.add(Dense(1))
 # compile and fit
 #####################
 
-### cumstom loss
+#### cumstom loss
 #from keras import backend as K
 #def custom_loss(y_true, y_pred): #mse
 #    return K.mean(K.square(y_pred - y_true), axis=-1)
 
-### assign optimizer parm
+#### assign optimizer parm
 #from keras import optimizers
 #sgd = optimizers.SGD(lr = 0.01)
 
