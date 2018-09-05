@@ -25,13 +25,14 @@ batch_size=20
 
 train_x = tf.placeholder(tf.float32,(None,Num_X) )
 train_y = tf.placeholder(tf.float32,(None,1))
+prob = tf.placeholder_with_default(1.0, shape=())
 
 hl_1= tf.layers.dense(inputs=train_x, units=10)
 hl_1= tf.nn.relu(hl_1)
 hl_1= tf.layers.batch_normalization(hl_1)
 
 hl_2= tf.layers.dense(hl_1, 10, tf.nn.relu)
-hl_2= tf.layers.dropout(hl_2,rate=0.8)
+hl_2= tf.layers.dropout(hl_2,rate=prob)
 
 out= tf.layers.dense(hl_2, 1)
 
@@ -52,7 +53,7 @@ sess.run(tf.global_variables_initializer())
 for epoch in range(epoch_size):
     for index, offset in enumerate(range(0, TrainX.shape[0], batch_size)):
         batch_x, batch_y = TrainX[offset: offset + batch_size], TrainY[offset: offset + batch_size]
-        sess.run([train_optimizer], feed_dict ={train_x: batch_x, train_y: batch_y})
+        sess.run([train_optimizer], feed_dict ={train_x: batch_x, train_y: batch_y, prob: 0.8})
     # train and net output
     if epoch % 1 == 0:
         loss_val= sess.run([loss], feed_dict ={train_x: TrainX, train_y: TrainY})
