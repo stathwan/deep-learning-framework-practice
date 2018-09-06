@@ -58,16 +58,16 @@ model.summary()
 
 #####################
 # compile and fit
-#####################/// 
+#####################
 batch_size = 128
 epochs = 12
 
 model.compile(loss=keras.losses.categorical_crossentropy,
               optimizer=keras.optimizers.Adadelta(),
-              metrics=['acc'])
+              metrics=['accuracy'])
 
 model.fit(TrainX, TrainY, batch_size=batch_size, epochs=epochs,
-           verbose=1,validation_data=(TestX, TestY)) #
+          verbose=1, validation_data=(TestX, TestY))
 
 #####################
 # evaluate
