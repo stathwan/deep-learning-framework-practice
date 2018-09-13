@@ -36,8 +36,8 @@ with tf.Session() as sess:
         _, loss_ = sess.run([train_op, loss], {data_x: b_x, data_y: b_y})
         if step % 50 == 0:
             accuracy_ = sess.run(accuracy, {data_x: mnist.test.images, data_y: mnist.test.labels})
-            print('Step:', step, '| train loss: %.4f' % loss_, '| test accuracy: %.2f' % accuracy_)
-            
+#            print('Step:', step, '| train loss: %.4f' % loss_, '| test accuracy: %.2f' % accuracy_)
+            print('Step: {} | train loss: {:.4f} | test accuracy: {:.2f}'.format(step, loss_, accuracy_))            
             
 test_output = sess.run(output, {data_x: mnist.test.images})
 pred_y = np.argmax(test_output, 1)
