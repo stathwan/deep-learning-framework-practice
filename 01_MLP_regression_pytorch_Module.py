@@ -46,7 +46,7 @@ class MLP_regression(nn.Module):
         hl_1 = self.batchnorm(hl_1)
         hl_2 = self.linear_2(hl_1)
         hl_2 = self.relu(hl_2)
-        hl_2 = self.dropout(hl_2)
+        hl_2 = self.dropout(hl_2,training=self.training)
         output = self.linear_3(hl_2)
 
         return output
