@@ -52,6 +52,7 @@ model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.5))
 model.add(Conv2D(128, (3, 3), strides=(2, 2),activation='relu'))
 model.add(Conv2D(128, (3, 3), activation='relu'))
+
 model.add(Conv2D(10, (1, 1), activation='sigmoid'))
 model.add(Flatten())
 model.summary()

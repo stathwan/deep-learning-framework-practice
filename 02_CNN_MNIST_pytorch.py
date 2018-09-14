@@ -1,35 +1,50 @@
-from __future__ import print_function
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
+#from torchsummary import summary  # install pip install torchsummary
 
 class Convolution_net(nn.Module):
     def __init__(self):
         super(Convolution_net, self).__init__()
-        self.conv1 = nn.Conv2d(1, 10, kernel_size=5)
-        self.conv2 = nn.Conv2d(10, 20, kernel_size=5)
+        self.conv1_1 = nn.Conv2d(1 , 32, kernel_size=3, padding=1)
+        self.conv1_2 = nn.Conv2d(32, 32, kernel_size=3, padding=1)
+        
+        self.conv2_1 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+        self.conv2_2 = nn.Conv2d(64, 64, kernel_size=3, padding=1)
         self.conv2_drop = nn.Dropout2d()
-        self.fc1 = nn.Linear(320, 50)
-        self.fc2 = nn.Linear(50, 10)
-
+        
+        self.conv3_1 = nn.Conv2d(64, 128, kernel_size=3, stride=2)
+        self.conv3_2 = nn.Conv2d(128, 128, kernel_size=3)
+        
+        self.conv4_1 = nn.Conv2d(128, 10, kernel_size=1)
+        
     def forward(self, x):
-        x = F.relu(F.max_pool2d(self.conv1(x), 2))
-        x = F.relu(F.max_pool2d(self.conv2_drop(self.conv2(x)), 2))
-        x = x.view(-1, 320)
-        x = F.relu(self.fc1(x))
-        x = F.dropout(x, training=self.training)
-        x = self.fc2(x)
-        return F.log_softmax(x, dim=1)
+        x = F.relu(self.conv1_1(x))
+        x = F.max_pool2d(F.relu(self.conv1_2(x)),2)
+
+        x = F.relu(self.conv2_1(x))
+        x = F.max_pool2d(F.relu(self.conv2_2(x)),2)
+        x = F.dropout(x,training=0.5)
+        
+        x = F.relu(self.conv3_1(x))
+        x = F.relu(self.conv3_2(x))
+
+        x = self.conv4_1(x)
+        x = x.view(-1,10)        
+        
+        return F.log_softmax(x, dim=0)
 
 def train(model, device, train_loader, optimizer, epoch):
     model.train()
     for batch_idx, (data, target) in enumerate(train_loader):
+
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output = model(data)
         loss = F.nll_loss(output, target)
+
         loss.backward()
         optimizer.step()
         if batch_idx % save_interval == 0:
@@ -54,6 +69,7 @@ def test(model, device, test_loader):
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
 
+
     
     
 epochs=10
@@ -64,7 +80,7 @@ momentum=0.5
 seed=1
 save_interval=10
 
-no_cuda=False
+no_cuda=True
 use_cuda = not no_cuda and torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")
 
